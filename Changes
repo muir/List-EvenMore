@@ -1,0 +1,14 @@
+Revision history for Perl module List::EvenMoreUtils
+
+0.12 2013/10/10
+
+ - Add git repository
+ - Rename CHANGELOG to Changes
+
+0.11 2009/09/01	0.11
+
+ - Minor documentation changes
+
+0.1 2009/07/24
+
+ - Initial version
