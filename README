@@ -1,0 +1,107 @@
+NAME
+     List::EvenMoreUtils - Array manipulation functions
+
+SYNOPSIS
+     use List::EvenMoreUtils qw(do_sublist);
+     use List::EvenMoreUtils qw(partial_ordering_differs);
+     use List::EvenMoreUtils qw(list_difference_position);
+     use List::EvenMoreUtils qw(keys_to_regex);
+     use List::EvenMoreUtils qw(list_to_text);
+     use List::EvenMoreUtils qw(initial_sublist_match);
+     use List::EvenMoreUtils qw(longer_list);
+     use List::EvenMoreUtils qw(repeatable_list_shuffler);
+
+     $difference = partial_ordering_differs( 
+            name_of_list1 => \@list1, 
+            name_of_list2 => \@list2,
+     )
+ 
+
+     $diffpos = list_difference_position(@list1, @list2);
+
+     $regex = keys_to_regex(%hash);
+
+     printf "We gave apples to %s.\n", list_to_text(@people);
+
+     print "unequal\n" if initial_sublist_match(@list1, @list2);
+
+     $longer = longer_list(@list1, @list2);
+
+FUNCTIONS
+  "do_sublist(&selector,&actor,@list)"
+    Use &selector on each item of @list to group the items into sublists.
+    Call &actor on each sublist. For the &selector, $_ is set to the each
+    list element in turn.
+
+     @urls = (qw(
+            http://foo.com/ 
+            http://foo.com/xy/
+            http://bar.com/xy/
+     ));
+     do_sublist(
+            sub {
+                    m{^http://([^/]+)};
+                    return $1;
+            },
+            sub {
+                    my $u = $_[0];
+                    $u =~ m{^(http://([^/]+))};
+                    print "paths for $2 = ".join(" ", map { substr($_, length($1)) } @_)."\n";
+            },
+            @urls
+     )
+
+  "keys_to_regex(%hash)"
+    Returns a regex that matches the keys of the hash. This isn't really a
+    list utility, so I hope you'll forgive me.
+
+     %x = (
+            Hope => 1,
+            April => 7,
+            Jane => 8,
+     );
+     my $re = keys_to_regex(%hash);
+     print "match\n" if $name =~ /^$re$/;
+
+  "list_to_text"
+    This add commas and "and" to lists to make them parse well in English.
+
+     print list_to_text("Jane", "Ellen");
+
+    Gives you:
+
+     Jane and Ellen
+
+   partial_ordering_differs
+    Given multiple lists, make sure that to the extent they have the same
+    elements, the elements are in the same order in all the lists.
+
+    If all the lists have the same ordering of their elements, then the
+    return value is "undef". If there is a difference in ordering, then the
+    return value is an English description of the difference. For example:
+
+     Item 'Fred' in list1 needs to come after 'Jane' since it does so in list2.
+
+   list_difference_position
+    Compare two lists. Report the 1-based index position where the lists are
+    first different from each other.
+
+    Returns "undef" if the lists are identical.
+
+    If one list is the start of the other list, returns the size of the
+    smaller of the two lists + 1.
+
+   initial_sublist_match
+    Compare two lists. If the two lists have the same number of elements,
+    compare them. Returns 1 if they are the same. If one of the lists is
+    shorter than the other, then compare the shorter list to a sublist of
+    the longer list that matches the shorter's length. If they're the same,
+    returns 1. Otherwise returns 0.
+
+   longer_list
+    Compare two lists. Return a reference to the longer list.
+
+LICENSE
+    This package may be used and redistributed under the terms of either the
+    Artistic 2.0 or LGPL 2.1 license.
+

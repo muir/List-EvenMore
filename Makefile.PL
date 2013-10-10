@@ -11,5 +11,23 @@ WriteMakefile(
 	'PREREQ_PM' => {
 		'String::CRC'		=> 0,
 	},
+	'META_MERGE'     => {
+		resources  => {
+			repository => 'http://github.com/muir/List-EvenMore',
+		},
+	},
 );
+
+package MY;
+
+sub postamble {
+    <<"END_OF_POSTAMBLE";
+
+pm_to_blib: README
+
+README: lib/List/EvenMoreUtils.pm
+\tpod2text lib/List/EvenMoreUtils.pm > README
+
+END_OF_POSTAMBLE
+}
 
