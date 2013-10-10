@@ -19,7 +19,7 @@ our @EXPORT_OK = qw(
 	repeatable_list_shuffler
 );
 
-our $VERSION = 0.11;
+our $VERSION = 0.12;
 
 sub do_sublist(&&@)
 {
